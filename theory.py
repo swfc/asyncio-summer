@@ -13,6 +13,7 @@ async def randn():
     return randint(1, 10)
 
 
+# this is an asynchronous generator
 async def square_odds(start, stop):
     for odd in odds(start, stop):
         await asyncio.sleep(2)
@@ -27,15 +28,17 @@ async def main():
     start = time.perf_counter()
     r = await randn()
     elapsed = time.perf_counter() - start
-    print(f'{r} took {elapsed:0.2f} seconds.')
+    print(f"{r} took {elapsed:0.2f} seconds.")
 
     start = time.perf_counter()
     r = await asyncio.gather(*(randn() for _ in range(10)))
     elapsed = time.perf_counter() - start
-    print(f'{r} took {elapsed:0.2f} seconds.')
+    print(f"{r} took {elapsed:0.2f} seconds.")
 
+    # to use asynchronous generator we use async for
     async for so in square_odds(11, 17):
-        print('so:', so)
+        print("so:", so)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
