@@ -1,4 +1,4 @@
-# show how basic generator works
+# Demonstrate basic generator works
 
 
 def skip1(start, stop):
