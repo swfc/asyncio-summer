@@ -11,6 +11,17 @@ def sync_my_randn():
     return randint(1, 10)
 
 
+# This asynchronous function is called a coroutine.
+# Requires an "async" before def. Should be called with await.
+# Without an await it is just a coroutine object.
+async def async_my_randn():
+    # asyncio.sleep is an async function (coroutine) and needs to be awaited.
+    # this await will wait for sleep to be complete but other things can
+    # be executed elsewhere until this has finished waiting.
+    await asyncio.sleep(3)
+    return randint(1, 10)
+
+
 def sync_main():
     # Basic single call to sync_my_randn will take 3 seconds
     start = time.perf_counter()
@@ -23,17 +34,6 @@ def sync_main():
     r = [sync_my_randn() for _ in range(3)]
     elapsed = time.perf_counter() - start
     print(f"{r} took {elapsed:0.2f} seconds.")
-
-
-# This asynchronous function is called a coroutine.
-# Requires an "async" before def. Should be called with await.
-# Without an await it is just a coroutine object.
-async def async_my_randn():
-    # asyncio.sleep is an async function (coroutine) and needs to be awaited.
-    # this await will wait for sleep to be complete but other things can
-    # be executed elsewhere until this has finished waiting.
-    await asyncio.sleep(3)
-    return randint(1, 10)
 
 
 # This is also a coroutine and needs to be awaited.
