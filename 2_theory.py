@@ -27,7 +27,7 @@ def sync_main():
 
 # This asynchronous function is called a coroutine.
 # Requires an "async" before def. Should be called with await.
-# Is a consumer.
+# Without an await it is just a coroutine object.
 async def async_my_randn():
     # asyncio.sleep is an async function (coroutine) and needs to be awaited.
     # this await will wait for sleep to be complete but other things can
@@ -50,22 +50,25 @@ async def async_main():
     elapsed = time.perf_counter() - start
     print(f"{r} took {elapsed:0.2f} seconds.")
 
-    # Use asyncio gather to run multiple async_my_randn asynchronously
+    # Use asyncio gather to run multiple async_my_randn asynchronously or concurrently
     # All 3 calls will only take 3 seconds!!
     start = time.perf_counter()
+
+    # each async_my_randn() is a coroutine object it does not execute the func
     r = await asyncio.gather(async_my_randn(), async_my_randn(), async_my_randn())
     elapsed = time.perf_counter() - start
     print(f"{r} took {elapsed:0.2f} seconds. AWESOME!!!!!!!!")
 
-    # Use asyncio gather to run multiple async_my_randn asynchronously
+    # Use asyncio gather to run multiple async_my_randn asynchronously or concurrently
     # All 3 calls will only take 3 seconds!!
     start = time.perf_counter()
     # use * to unpack a list comprehension into separate arguments
+    # each task (asyncio calls them futures) is ran concurrently by gather
     r = await asyncio.gather(*[async_my_randn() for _ in range(10)])
     elapsed = time.perf_counter() - start
     print(f"{r} took {elapsed:0.2f} seconds. AWESOMER!!!!!!!!")
 
-    # Use asyncio gather to run multiple async_my_randn asynchronously
+    # Use asyncio gather to run multiple async_my_randn asynchronously or concurrently
     # All 3 calls will only take 3 seconds!!
     start = time.perf_counter()
     # use * to unpack a generator into separate arguments
