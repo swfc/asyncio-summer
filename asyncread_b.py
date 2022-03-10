@@ -2,8 +2,8 @@ import asyncio
 import sys
 from pathlib import Path
 
+import aiofiles
 import aionotify
-from aiofile import AIOFile, LineReader
 
 
 async def follow(rawfn):
@@ -21,17 +21,15 @@ async def follow(rawfn):
     print('Watcher created for "{}"'.format(fnpath))
 
     # Open and read what is in file already
-    async with AIOFile(fnpath, mode="r", encoding="utf-8") as afp:
-        print("Sending lines!")
-        reader = LineReader(afp)
-
-        async for line in reader:
+    async with aiofiles.open(fnpath, mode="r", encoding="utf-8") as af:
+        print("Reading lines!")
+        async for line in af:
             print(line, end="")
 
         while True:
             event = await watcher.get_event()
             print("Got event! {}".format(event))
-            async for line in reader:
+            async for line in af:
                 print(line, end="")
 
         watcher.close()
